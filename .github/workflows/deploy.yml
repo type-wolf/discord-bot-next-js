@@ -1,0 +1,64 @@
+name: Heroku Deploy
+on:
+    push:
+        branches:
+            - deploy
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        env:
+            ## Next.js
+            NEXT_PUBLIC_ORIGIN: ${{secrets.NEXT_PUBLIC_ORIGIN_PRODUCT}}
+            NEXT_PUBLIC_API_VERSION: ${{secrets.NEXT_PUBLIC_API_VERSION}}
+
+            ## NextAuth
+            GUILD_ID: ${{secrets.GUILD_ID}}
+            CLIENT_ID: ${{secrets.CLIENT_ID_PRODUCT}}
+            CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
+            BOT_TOKEN: ${{secrets.BOT_TOKEN}}
+            NEXTAUTH_SECRET: ${{secret.NEXTAUTH_SECRET}}
+
+            ## DiscordAPI
+            DISCORD_API_VERSION: ${{secret.DISCORD_API_KEY}}
+
+            ## WalletConnect
+            NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: ${{secret.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID}}
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v2
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v2
+              with:
+                  node-version: 18
+
+            - name: Install Dependencies
+              run: npm ci
+
+            - name: Build
+              run: npm run build:all
+
+            - name: Deploy to Heroku
+              uses: akhileshns/heroku-deploy@v3.12.12
+              with:
+                  heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+                  heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+                  heroku_email: ${{secrets.HEROKU_EMAIL}}
+              env:
+                  ## Next.js
+                  HD_NEXT_PUBLIC_ORIGIN: ${{secrets.NEXT_PUBLIC_ORIGIN_PRODUCT}}
+                  HD_NEXT_PUBLIC_API_VERSION: ${{secrets.NEXT_PUBLIC_API_VERSION}}
+
+                  ## NextAuth
+                  HD_GUILD_ID: ${{secrets.GUILD_ID}}
+                  HD_CLIENT_ID: ${{secrets.CLIENT_ID_PRODUCT}}
+                  HD_CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
+                  HD_BOT_TOKEN: ${{secrets.BOT_TOKEN}}
+                  HD_NEXTAUTH_SECRET: ${{secret.NEXTAUTH_SECRET}}
+
+                  ## DiscordAPI
+                  HD_DISCORD_API_VERSION: ${{secret.DISCORD_API_KEY}}
+
+                  ## WalletConnect
+                  HD_NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: ${{secret.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID}}

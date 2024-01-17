@@ -1,0 +1,32 @@
+{
+	"name": "discord-bot-next-js",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"build:web": "npm run --prefix web build",
+		"build:worker": "npm run --prefix worker build",
+		"build:all": "npm run --prefix web build && npm run --prefix worker build",
+		"dev:web": "npm run --prefix web dev",
+		"dev:worker": "npm run --prefix worker dev",
+		"start:web": "npm run --prefix web start",
+		"heroku-postbuild": "npm run build:all",
+		"start:worker": "npm run --prefix worker start",
+		"lint:web": "npm run --prefix web lint",
+		"lint:worker": "npm run --prefix worker lint",
+		"lint:all": "npm run --prefix web lint && npm run --prefix worker lint",
+		"format:web": "npm run --prefix web format",
+		"format:worker": "npm run --prefix worker format",
+		"format:all": "npm run --prefix web format && npm run --prefix worker format",
+		"test:web": "npm run --prefix web test",
+		"test:worker": "npm run --prefix worker test",
+		"test:all": "npm run --prefix web test && npm run --prefix worker test"
+	},
+	"workspaces": [
+		"web",
+		"worker"
+	],
+	"volta": {
+		"node": "18.15.0",
+		"npm": "9.5.1"
+	}
+}
